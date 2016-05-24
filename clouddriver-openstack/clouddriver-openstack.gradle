@@ -14,9 +14,19 @@
  * limitations under the License.
  */
 
+ext {
+  openstack4jVersion = '3.0.0'
+  betamaxVersion = '2.0.0-alpha-1'
+}
+
 dependencies {
   compile project(":clouddriver-core")
-  compile group: 'org.pacesys', name: 'openstack4j', version: '3.0.0'
+
   compile spinnaker.dependency('bootActuator')
   compile spinnaker.dependency('bootWeb')
+
+  compile "org.pacesys:openstack4j-core:$openstack4jVersion"
+  compile "org.pacesys.openstack4j.connectors:openstack4j-okhttp:$openstack4jVersion"
+
+  testCompile "software.betamax:betamax-junit:${betamaxVersion}"
 }

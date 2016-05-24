@@ -17,6 +17,7 @@
 package com.netflix.spinnaker.clouddriver.openstack.security
 
 import com.netflix.spinnaker.cats.module.CatsModule
+import com.netflix.spinnaker.cats.provider.ProviderSynchronizerTypeWrapper
 import com.netflix.spinnaker.clouddriver.openstack.config.OpenstackConfigurationProperties
 import com.netflix.spinnaker.clouddriver.security.AccountCredentialsRepository
 import com.netflix.spinnaker.clouddriver.security.CredentialsInitializerSynchronizable
@@ -41,6 +42,9 @@ class OpenstackCredentialsInitializer implements CredentialsInitializerSynchroni
 
   @Autowired
   ApplicationContext appContext
+
+  @Autowired
+  List<ProviderSynchronizerTypeWrapper> providerSynchronizerTypeWrappers
 
   @Bean
   List<? extends OpenstackNamedAccountCredentials> openstackNamedAccountCredentials(
@@ -78,7 +82,9 @@ class OpenstackCredentialsInitializer implements CredentialsInitializerSynchroni
     }
     ProviderUtils.unscheduleAndDeregisterAgents(namesOfDeletedAccounts, catsModule)
 
-    // TODO: call ProviderUtils.synchronizeAgentProviders() once agents are registered
+    if ((namesOfDeletedAccounts || accountsToAdd) && catsModule) {
+      ProviderUtils.synchronizeAgentProviders(appContext, providerSynchronizerTypeWrappers)
+    }
 
     accountCredentialsRepository.all.findAll {
       it instanceof OpenstackNamedAccountCredentials

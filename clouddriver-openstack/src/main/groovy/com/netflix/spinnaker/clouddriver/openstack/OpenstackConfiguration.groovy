@@ -19,7 +19,10 @@ package com.netflix.spinnaker.clouddriver.openstack
 import com.netflix.spinnaker.clouddriver.openstack.config.OpenstackConfigurationProperties
 import com.netflix.spinnaker.clouddriver.openstack.health.OpenstackHealthIndicator
 import com.netflix.spinnaker.clouddriver.openstack.security.OpenstackCredentialsInitializer
+import com.netflix.spinnaker.clouddriver.openstack.utils.DefaultOpenstackClientFactory
+import com.netflix.spinnaker.clouddriver.openstack.utils.OpenstackClientFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -48,5 +51,11 @@ class OpenstackConfiguration {
   @Bean
   OpenstackHealthIndicator openstackHealthIndicator() {
     new OpenstackHealthIndicator()
+  }
+
+  @Bean
+  @ConditionalOnMissingBean(OpenstackClientFactory)
+  OpenstackClientFactory openstackClientFactory() {
+    new DefaultOpenstackClientFactory()
   }
 }

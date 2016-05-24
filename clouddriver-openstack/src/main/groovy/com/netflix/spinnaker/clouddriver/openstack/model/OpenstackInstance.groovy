@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Veritas Technologies LLC.
+ * Copyright 2016 Target Corp.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,28 @@
  * limitations under the License.
  */
 
-package com.netflix.spinnaker.clouddriver.openstack
+package com.netflix.spinnaker.clouddriver.openstack.model
 
-import com.netflix.spinnaker.clouddriver.core.CloudProvider
-import org.springframework.stereotype.Component
-
-import java.lang.annotation.Annotation
+import com.netflix.spinnaker.clouddriver.model.HealthState
+import com.netflix.spinnaker.clouddriver.model.Instance
 
 
-@Component
-class OpenstackCloudProvider implements CloudProvider {
-  static final String ID = "openstack"
-  final String displayName = "Openstack"
-  final Class<Annotation> operationAnnotationType = OpenstackOperation.class
+class OpenstackInstance implements Instance, Serializable {
+  String name
+  String zone
 
   @Override
-  String getId() {
-    ID
+  HealthState getHealthState() {
+    return HealthState.Up
+  }
+
+  @Override
+  Long getLaunchTime() {
+    return System.currentTimeMillis()
+  }
+
+  @Override
+  List<Map<String, String>> getHealth() {
+    return [['test':'up']]
   }
 }
