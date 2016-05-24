@@ -3,9 +3,9 @@ package com.netflix.spinnaker.clouddriver.openstack.client
 import org.openstack4j.api.OSClient
 
 /**
- * TODO we will want v2 and v3 providers to extend from this with identity specific operations.
+ *
  */
-class OpenstackClientProvider {
+abstract class OpenstackClientProvider {
 
   OSClient client
 
@@ -13,9 +13,11 @@ class OpenstackClientProvider {
     this.client = client
   }
 
-//  def deleteInstance(String instanceId) {
-//    client.compute().servers().delete(instanceId)
-//  }
+  //TODO test
+  def deleteInstance(String instanceId) {
+    client.compute().servers().delete(instanceId)
+  }
 
+  //TODO stuff common to v2 and v3
 
 }
