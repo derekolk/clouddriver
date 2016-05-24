@@ -4,7 +4,7 @@ server:
     enabled: false
 
 redis:
-  connection: redis://localhost:6379
+  connection: redis://192.168.99.102:6379
   scheduler: default
   parallelism: -1
 
@@ -254,7 +254,16 @@ google:
         sizeGb: 10
 
 openstack:
-  enabled: false
+  enabled: true
+  accounts:
+    - name: test
+      environment: test
+      accountType : test
+      master: test
+      username: test
+      password: test
+      tenantId: test
+      endpoint: test
 
 kubernetes:
   enabled: false

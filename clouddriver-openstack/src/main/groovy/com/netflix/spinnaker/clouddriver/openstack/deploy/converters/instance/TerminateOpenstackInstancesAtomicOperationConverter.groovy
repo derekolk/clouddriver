@@ -1,6 +1,7 @@
-package com.netflix.spinnaker.clouddriver.openstack.deploy.converter.instance
+package com.netflix.spinnaker.clouddriver.openstack.deploy.converters.instance
 
 import com.netflix.spinnaker.clouddriver.openstack.OpenstackOperation
+import com.netflix.spinnaker.clouddriver.openstack.deploy.converters.OpenstackAtomicOperationConverterHelper
 import com.netflix.spinnaker.clouddriver.openstack.deploy.description.instance.OpenstackInstancesDescription
 import com.netflix.spinnaker.clouddriver.openstack.deploy.ops.instance.TerminateOpenstackInstancesAtomicOperation
 import com.netflix.spinnaker.clouddriver.orchestration.AtomicOperation
@@ -18,8 +19,6 @@ class TerminateOpenstackInstancesAtomicOperationConverter extends AbstractAtomic
 
   @Override
   OpenstackInstancesDescription convertDescription(Map input) {
-    def converted = objectMapper.convertValue(input, OpenstackInstancesDescription)
-    converted.credentials = getCredentialsObject(input.credentials as String)
-    converted
+    OpenstackAtomicOperationConverterHelper.convertDescription(input, this, OpenstackInstancesDescription)
   }
 }

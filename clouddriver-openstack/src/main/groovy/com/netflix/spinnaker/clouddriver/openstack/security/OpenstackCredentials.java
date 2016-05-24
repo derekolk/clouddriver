@@ -27,11 +27,11 @@ public class OpenstackCredentials {
 
   public OpenstackCredentials(String username, String password, String tenantId, String endpoint) {
     // TODO: add support for keystone v2
-    this.client = OSFactory.builderV3()
-                           .endpoint(endpoint)
-                           .credentials(username, password)
-                           .scopeToProject(Identifier.byName(tenantId))
-                           .authenticate();
+    //this.client = OSFactory.builderV3()
+    //                       .endpoint(endpoint)
+    //                       .credentials(username, password)
+    //                       .scopeToProject(Identifier.byName(tenantId))
+     //                      .authenticate();
 
     /**
      * Cached token can be used to create a client in cases where you would not want to re-authenticate
@@ -39,7 +39,9 @@ public class OpenstackCredentials {
      * @see org.openstack4j.openstack.OSFactory#clientFromToken(Token)
      *
      */
-    this.token = client.getToken();
+    //this.token = client.getToken();
+    this.client = null;
+    this.token = null;
   }
 
   public OSClientV3 getClient() {
