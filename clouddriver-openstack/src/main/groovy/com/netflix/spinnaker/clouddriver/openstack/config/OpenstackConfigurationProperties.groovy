@@ -28,7 +28,8 @@ class OpenstackConfigurationProperties {
     String master
     String username
     String password
-    String tenantId
+    String tenantName
+    String domainName
     String endpoint
   }
 

@@ -4,7 +4,7 @@ server:
     enabled: false
 
 redis:
-  connection: redis://192.168.99.102:6379
+  connection: redis://localhost:6379
   scheduler: default
   parallelism: -1
 
@@ -258,11 +258,12 @@ openstack:
   accounts:
     - name: test
       environment: test
-      accountType : test
+      accountType : v2
       master: test
       username: test
       password: test
-      tenantId: test
+      tenantName: test
+      domainName: test
       endpoint: test
 
 kubernetes:

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Google, Inc.
+ * Copyright 2016 Veritas Technologies LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package com.netflix.spinnaker.clouddriver.openstack.deploy.description
+package com.netflix.spinnaker.clouddriver.openstack.security
 
-import com.netflix.spinnaker.clouddriver.deploy.DeployDescription
-import com.netflix.spinnaker.clouddriver.openstack.security.OpenstackCredentials
-import groovy.transform.AutoClone
-import groovy.transform.Canonical
+import com.netflix.spinnaker.clouddriver.openstack.client.OpenstackClientProvider
+import com.netflix.spinnaker.clouddriver.openstack.client.OpenstackProviderFactory
 
-// Pair of credentials name and associated openstack account
-@AutoClone
-@Canonical
-class OpenstackAtomicOperationDescription implements DeployDescription {
-  String account
-  OpenstackCredentials credentials
+public class OpenstackCredentials {
+
+  final OpenstackClientProvider provider
+
+  OpenstackCredentials(OpenstackNamedAccountCredentials accountCredentials) {
+    this.provider = OpenstackProviderFactory.createProvider(accountCredentials)
+  }
+
 }

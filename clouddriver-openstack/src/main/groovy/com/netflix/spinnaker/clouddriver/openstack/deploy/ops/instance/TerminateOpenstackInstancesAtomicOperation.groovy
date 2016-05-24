@@ -24,8 +24,8 @@ class TerminateOpenstackInstancesAtomicOperation implements AtomicOperation<Void
   }
 
   /*
-   * curl -X POST -H "Content-Type: application/json" -d '[ { "terminateInstances": { "instanceIds": ["os-test-v000-beef"], "namespace": "default", "credentials": "my-os-account" }} ]' localhost:7002/openstack/ops
-   * curl -X GET -H "Accept: application/json" localhost:7002/task/2
+   * curl -X POST -H "Content-Type: application/json" -d '[ { "terminateInstances": { "instanceIds": ["os-test-v000-beef"], "account": "test" }} ]' localhost:7002/openstack/ops
+   * curl -X GET -H "Accept: application/json" localhost:7002/task/1
    */
   @Override
   Void operate(List priorOutputs) {
