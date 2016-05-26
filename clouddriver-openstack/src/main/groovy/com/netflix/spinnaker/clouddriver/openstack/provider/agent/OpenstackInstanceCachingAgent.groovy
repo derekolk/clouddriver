@@ -22,8 +22,13 @@ import com.netflix.spinnaker.cats.cache.DefaultCacheData
 import com.netflix.spinnaker.cats.provider.ProviderCache
 import com.netflix.spinnaker.clouddriver.openstack.cache.Keys
 import com.netflix.spinnaker.clouddriver.openstack.provider.OpenstackInfastructureProvider
+import com.netflix.spinnaker.clouddriver.openstack.provider.view.MutableCacheData
 import com.netflix.spinnaker.clouddriver.openstack.security.OpenstackNamedAccountCredentials
 import groovy.util.logging.Slf4j
+import org.openstack4j.api.OSClient
+import org.openstack4j.model.compute.Server
+import org.openstack4j.model.identity.v3.Region
+import org.openstack4j.openstack.OSFactory
 
 import static com.netflix.spinnaker.cats.agent.AgentDataType.Authority.AUTHORITATIVE
 
@@ -48,7 +53,7 @@ class OpenstackInstanceCachingAgent implements CachingAgent, AccountAware {
 
   @Override
   String getAgentType() {
-    "${account.name}/test"
+    "${account.name}/${OpenstackInstanceCachingAgent.simpleName}"
   }
 
   @Override
@@ -64,19 +69,27 @@ class OpenstackInstanceCachingAgent implements CachingAgent, AccountAware {
   @Override
   CacheResult loadData(ProviderCache providerCache) {
     log.info("Describing items in ${agentType}")
-    List<CacheData> data = [
-      new DefaultCacheData(Keys.getInstanceKey('id', 'account', 'region'), [
-        name: 'test-name-man',
-        instanceType: 'm1.hot',
-        launchTime: 'now',
-        zone: 'twilight',
-        region: 'region',
-        networkInterfaces: 'network',
-        metadata: 'metadata',
-        health: 'unknown',
-        tags: 'tags'], [:])
-    ]
-    log.info("Caching ${data.size()} items in ${agentType}")
-    new DefaultCacheResult([(Keys.Namespace.INSTANCES.ns): data])
+
+    Map<String, MutableCacheData> cachedInstances = MutableCacheData.mutableCacheMap()
+
+    ['test'].each { String region ->
+      log.info("Region: ${region}")
+      List<Server> servers = this.account.credentials.provider.getServers()
+
+      servers?.each { Server server ->
+        String name = server.name
+        log.info("Server: " + name)
+        String key = Keys.getInstanceKey(name, accountName, region)
+        cachedInstances[key].with {
+          attributes.name = name
+          attributes.zone = server.availabilityZone
+          attributes.imageName = server.flavor.name
+          attributes.launchedDate = server.launchedAt
+        }
+      }
+    }
+
+    log.info("Caching ${cachedInstances.size()} items in ${agentType}")
+    new DefaultCacheResult([(Keys.Namespace.INSTANCES.ns): cachedInstances.values()])
   }
 }

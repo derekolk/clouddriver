@@ -17,14 +17,22 @@
 package com.netflix.spinnaker.clouddriver.openstack.client
 
 import org.openstack4j.api.OSClient
+import org.openstack4j.api.OSClient.OSClientV2
+import org.openstack4j.openstack.OSFactory
 
 /**
  * Provides access to the Openstack V2 API.
  */
 class OpenstackClientV2Provider extends OpenstackClientProvider {
+  OSClientV2 client
 
-  OpenstackClientV2Provider(OSClient client) {
-    super(client)
+  OpenstackClientV2Provider(OSClientV2 client) {
+    this.client = client
+  }
+
+  @Override
+  OSClient getOSClient() {
+    return OSFactory.clientFromAccess(this.client.access)
   }
 
   @Override

@@ -17,14 +17,23 @@
 package com.netflix.spinnaker.clouddriver.openstack.client
 
 import org.openstack4j.api.OSClient
+import org.openstack4j.api.OSClient.OSClientV3
+import org.openstack4j.model.identity.v3.Token
+import org.openstack4j.openstack.OSFactory
 
 /**
  * Provides access to the Openstack V3 API.
  */
 class OpenstackClientV3Provider extends OpenstackClientProvider {
+  OSClientV3 client
 
-  OpenstackClientV3Provider(OSClient client) {
-    super(client)
+  OpenstackClientV3Provider(OSClientV3 client) {
+    this.client = client
+  }
+
+  @Override
+  OSClient getOSClient() {
+    return OSFactory.clientFromToken(this.client.token)
   }
 
   @Override

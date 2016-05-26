@@ -23,11 +23,7 @@ import org.openstack4j.api.OSClient
  */
 abstract class OpenstackClientProvider {
 
-  OSClient client
-
-  OpenstackClientProvider(OSClient client) {
-    this.client = client
-  }
+  abstract OSClient getOSClient()
 
   //TODO test
   /**
@@ -36,7 +32,11 @@ abstract class OpenstackClientProvider {
    * @return
    */
   def deleteInstance(String instanceId) {
-    client.compute().servers().delete(instanceId)
+    getOSClient().compute().servers().delete(instanceId)
+  }
+
+  def getServers() {
+    getOSClient().compute().servers().list()
   }
 
   /**
